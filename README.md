@@ -3,4 +3,4 @@
 
 A wobble client in python.
 
-Zeiss supplied a [reference implementation in go](https://github.com/ZeissS/wobble-bot-go).
+[@ZeissS](http://github.com/zeisss) supplied a [reference implementation in go](https://github.com/ZeissS/wobble-bot-go).
