@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import logging
+from wobble import *
 
-from wobble import WobbleService
+logging.basicConfig(level=logging.DEBUG)
 
 service = WobbleService()
-
-print service.wobble_api_version()
+service.connect("dummy_api_key")
+# service.get_notifications()

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import logging
 import jsonrpclib
 
 
@@ -15,9 +15,28 @@ def requires_login(fn):
 class WobbleService(object):
     """WobbleService"""
 
+    def log_calls(fn):
+        def wrapper(self, *args):
+            result = fn(self, args)
+            logging.debug("{obj}.{method}{params} ->\t{result}".format(
+                obj=self, method=fn.func_name, params=args, result=result))
+            return result
+        return wrapper
+
     def __init__(self, api_endpoint='http://wobble.moinz.de/api/endpoint.php'):
         super(WobbleService, self).__init__()
         self.wobble_server = jsonrpclib.Server(api_endpoint)
+        self.logger = None
+
+    @log_calls
+    def connect(self, user_name_or_api_key, user_password=None):
+        if user_password is None:
+            # only one parameter so its the api key
+            self.api_key = user_name_or_api_key
+        else:
+            # we have user name and password
+            self.api_key = self.user_login(user_name_or_api_key, user_password)
+
 
     def wobble_api_version(self):
         return self.wobble_server.wobble.api_version()
@@ -135,3 +154,6 @@ class WobbleService(object):
     @requires_login
     def user_remove_contact(self, contact_id):
         pass
+
+    def __str__(self):
+        return "<WobbleService({})>".format(self.api_endpoint)
