@@ -46,7 +46,6 @@ class WobbleService(object):
     def is_loged_in(self):
         return self.api_key is not None
 
-    @requires_login
     def wobble_api_version(self):
         return self.wobble_server.wobble.api_version()
 
