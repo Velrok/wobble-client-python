@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import jsonrpclib
+
 
 def requires_login(fn):
     def wrapper(*args):
@@ -12,14 +14,18 @@ def requires_login(fn):
 
 class WobbleService(object):
     """WobbleService"""
-    def __init__(self, api_endpoint):
-        super(WobbleService, self).__init__()
 
-        self.api_endpoint = api_endpoint
+    def __init__(self, api_endpoint='http://wobble.moinz.de/api/endpoint.php'):
+        super(WobbleService, self).__init__()
+        self.wobble_server = jsonrpclib.Server(api_endpoint)
 
     def wobble_api_version(self):
-        # method_name = 'wobble.api_version'
-        pass
+        method_name = 'wobble.api_version'
+        response = getattr(self.wobble_server, method_name)()
+        major, minor, patch = map(int, response.split('.'))
+
+        if (major > 0 or minor > 6):
+            print('Well hello, someone updated the API!')
 
     @requires_login
     def topics_list(self, archived=False):
@@ -30,7 +36,8 @@ class WobbleService(object):
         pass
 
     @requires_login
-    def topics_create(self, ):
+    def topics_create(self, topic_id):
+        # params => id
         pass
 
     @requires_login
