@@ -181,10 +181,11 @@ class WobbleService(object):
 
     @requires_login
     @log_calls
-    def get_notifications(self, next_timestamp=None):
-        result = self.wobble_server.get_notifications(self.last_notification_timestamp)
+    def get_notifications(self):
+        result = self.wobble_server.get_notifications(next_timestamp=self.last_notification_timestamp,
+                                                      apikey=self.api_key)
         self.last_notification_timestamp = result['next_timestamp']
-        print result['messages']
+        return result['messages']
 
     @requires_login
     @log_calls
