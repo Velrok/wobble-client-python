@@ -20,12 +20,12 @@ class WobbleService(object):
         self.wobble_server = jsonrpclib.Server(api_endpoint)
 
     def wobble_api_version(self):
-        method_name = 'wobble.api_version'
-        response = getattr(self.wobble_server, method_name)()
-        major, minor, patch = map(int, response.split('.'))
+        return self.wobble_server.wobble.api_version()
 
-        if (major > 0 or minor > 6):
-            print('Well hello, someone updated the API!')
+    def version_compatebility_check(self):
+        version = self.wobble_api_version()
+        major, minor, patch = map(int, version.split('.'))
+        return (major <= 0 or minor <= 6)
 
     @requires_login
     def topics_list(self, archived=False):

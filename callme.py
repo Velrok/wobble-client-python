@@ -4,4 +4,4 @@ from wobble import WobbleService
 
 service = WobbleService()
 
-service.wobble_api_version()
+print service.wobble_api_version()
