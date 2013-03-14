@@ -3,17 +3,19 @@ import logging
 import jsonrpclib
 
 
-def requires_login(fn):
-    def wrapper(*args):
-        # TODO: check if logged in, else throw error
-
-        # call method
-        fn(*args)
-    return wrapper
+class LoginRequiredException(Exception):
+    pass
 
 
 class WobbleService(object):
     """WobbleService"""
+
+    def requires_login(fn):
+        def wrapper(self, *args):
+            if not self.is_loged_in():
+                raise LoginRequiredException("Did you forget to call .connect()?")
+            fn(self, *args)
+        return wrapper
 
     def log_calls(fn):
         def wrapper(self, *args):
@@ -27,6 +29,9 @@ class WobbleService(object):
                        json_rpc_server_class=jsonrpclib.Server):
         super(WobbleService, self).__init__()
         self.wobble_server = json_rpc_server_class(api_endpoint)
+        self.api_endpoint = api_endpoint
+        self.api_key = None
+        self.last_notification_timestamp = None
         self.logger = None
 
     @log_calls
@@ -38,7 +43,10 @@ class WobbleService(object):
             # we have user name and password
             self.api_key = self.user_login(user_name_or_api_key, user_password)
 
+    def is_loged_in(self):
+        return self.api_key is not None
 
+    @requires_login
     def wobble_api_version(self):
         return self.wobble_server.wobble.api_version()
 
@@ -123,25 +131,21 @@ class WobbleService(object):
     @log_calls
     @requires_login
     def user_get(self):
-
         pass
 
     @log_calls
     @requires_login
     def user_get_id(self):
-
         pass
 
     @log_calls
     @requires_login
     def user_register(self, email, password):
-
-        pass
+        self.wobble_server.user_register(email, password)
 
     @log_calls
     @requires_login
     def user_change_name(self, new_name):
-
         pass
 
     @requires_login
@@ -161,7 +165,9 @@ class WobbleService(object):
     @log_calls
     @requires_login
     def get_notifications(self, next_timestamp=None):
-        pass
+        result = self.wobble_server.get_notifications(self.last_notification_timestamp)
+        self.last_notification_timestamp = result['next_timestamp']
+        print result['messages']
 
     @log_calls
     @requires_login
