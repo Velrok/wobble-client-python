@@ -43,6 +43,18 @@ class WobbleService(object):
         self.last_notification_timestamp = None
         self.logger = None
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exception=None, error=None, traceback=None):
+        if exception:
+            logging.error(exception)
+            logging.error(error)
+            logging.error(traceback)
+
+        self.user_signout()
+        return self
+
     @log_calls
     def connect(self, user_name_or_api_key, user_password=None):
         if user_password is None:
