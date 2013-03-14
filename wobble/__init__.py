@@ -11,19 +11,28 @@ class WobbleService(object):
     """WobbleService"""
 
     def requires_login(fn):
-        def wrapper(self, *args):
+        def requires_login_decorator(self, *args):
             if not self.is_loged_in():
                 raise LoginRequiredException("Did you forget to call .connect()?")
-            fn(self, *args)
-        return wrapper
+            return fn(self, *args)
+        return requires_login_decorator
 
     def log_calls(fn):
-        def wrapper(self, *args):
-            result = fn(self, args)
+        def log_calls_decorator(*params):
+            self = params[0]
+            args = params[1:]
+
+            logging.debug("{obj}.{method}{params}".format(
+                obj=self, method=fn.func_name, params=args))
+
+            result = fn(*params)
+
             logging.debug("{obj}.{method}{params} ->\t{result}".format(
                 obj=self, method=fn.func_name, params=args, result=result))
+
             return result
-        return wrapper
+
+        return log_calls_decorator
 
     def __init__(self, api_endpoint='http://wobble.moinz.de/api/endpoint.php',
                        json_rpc_server_class=jsonrpclib.Server):
@@ -54,96 +63,96 @@ class WobbleService(object):
         major, minor, patch = map(int, version.split('.'))
         return (major <= 0 or minor <= 6)
 
-    @log_calls
     @requires_login
+    @log_calls
     def topics_list(self, archived=False):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def topics_search(self, query):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def topics_create(self, topic_id):
         # params => id
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def topic_get_details(self, topic_id):
         # params => id
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def topic_add_user(self, topic_id, contact_id):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def topic_remove_user(self, topic_id, contact_id):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def topic_set_archived(self, topic_id, archived):
         # archived => Boolean(0,1)
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def topic_remove_message(self, topic_id, post_id):
         # params => message_id
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def post_create(self, topic_id, post_id, parent_post_id, intended_reply):
         # intended_reply => Boolean(0,1)
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def post_edit(self, topic_id, post_id, content, revision_no):
         # revision_no => Number of current revision
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def post_delete(self, topic_id, post_id):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def post_read(self, topic_id, post_id, read):
         # read => Boolean
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def post_change_lock(self, topic_id, post_id, lock):
         # lock => Boolean(0,1)
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def user_get(self):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def user_get_id(self):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def user_register(self, email, password):
         self.wobble_server.user_register(email, password)
 
-    @log_calls
     @requires_login
+    @log_calls
     def user_change_name(self, new_name):
         pass
 
@@ -152,34 +161,33 @@ class WobbleService(object):
         pass
 
     @log_calls
-    @requires_login
     def user_login(self, email, password):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def user_signout(self):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def get_notifications(self, next_timestamp=None):
         result = self.wobble_server.get_notifications(self.last_notification_timestamp)
         self.last_notification_timestamp = result['next_timestamp']
         print result['messages']
 
-    @log_calls
     @requires_login
+    @log_calls
     def user_get_contacts(self):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def user_add_contact(self, contact_email):
         pass
 
-    @log_calls
     @requires_login
+    @log_calls
     def user_remove_contact(self, contact_id):
         pass
 
