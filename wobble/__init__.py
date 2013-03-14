@@ -23,9 +23,10 @@ class WobbleService(object):
             return result
         return wrapper
 
-    def __init__(self, api_endpoint='http://wobble.moinz.de/api/endpoint.php'):
+    def __init__(self, api_endpoint='http://wobble.moinz.de/api/endpoint.php',
+                       json_rpc_server_class=jsonrpclib.Server):
         super(WobbleService, self).__init__()
-        self.wobble_server = jsonrpclib.Server(api_endpoint)
+        self.wobble_server = json_rpc_server_class(api_endpoint)
         self.logger = None
 
     @log_calls
