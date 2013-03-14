@@ -139,6 +139,7 @@ class WobbleService(object):
     def user_signout(self):
         pass
 
+    @log_calls
     @requires_login
     def get_notifications(self, next_timestamp=None):
         pass
