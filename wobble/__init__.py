@@ -46,82 +46,98 @@ class WobbleService(object):
         major, minor, patch = map(int, version.split('.'))
         return (major <= 0 or minor <= 6)
 
+    @log_calls
     @requires_login
     def topics_list(self, archived=False):
         pass
 
+    @log_calls
     @requires_login
     def topics_search(self, query):
         pass
 
+    @log_calls
     @requires_login
     def topics_create(self, topic_id):
         # params => id
         pass
 
+    @log_calls
     @requires_login
     def topic_get_details(self, topic_id):
         # params => id
         pass
 
+    @log_calls
     @requires_login
     def topic_add_user(self, topic_id, contact_id):
         pass
 
+    @log_calls
     @requires_login
     def topic_remove_user(self, topic_id, contact_id):
-
         pass
 
+    @log_calls
     @requires_login
     def topic_set_archived(self, topic_id, archived):
         # archived => Boolean(0,1)
         pass
 
+    @log_calls
     @requires_login
     def topic_remove_message(self, topic_id, post_id):
         # params => message_id
         pass
 
+    @log_calls
     @requires_login
     def post_create(self, topic_id, post_id, parent_post_id, intended_reply):
         # intended_reply => Boolean(0,1)
         pass
 
+    @log_calls
     @requires_login
     def post_edit(self, topic_id, post_id, content, revision_no):
         # revision_no => Number of current revision
         pass
 
+    @log_calls
     @requires_login
     def post_delete(self, topic_id, post_id):
         pass
 
+    @log_calls
     @requires_login
     def post_read(self, topic_id, post_id, read):
         # read => Boolean
         pass
 
+    @log_calls
     @requires_login
     def post_change_lock(self, topic_id, post_id, lock):
         # lock => Boolean(0,1)
         pass
 
+    @log_calls
     @requires_login
     def user_get(self):
 
         pass
 
+    @log_calls
     @requires_login
     def user_get_id(self):
 
         pass
 
+    @log_calls
     @requires_login
     def user_register(self, email, password):
 
         pass
 
+    @log_calls
     @requires_login
     def user_change_name(self, new_name):
 
@@ -131,10 +147,12 @@ class WobbleService(object):
     def user_change_password(self, new_password):
         pass
 
+    @log_calls
     @requires_login
     def user_login(self, email, password):
         pass
 
+    @log_calls
     @requires_login
     def user_signout(self):
         pass
@@ -144,14 +162,17 @@ class WobbleService(object):
     def get_notifications(self, next_timestamp=None):
         pass
 
+    @log_calls
     @requires_login
     def user_get_contacts(self):
         pass
 
+    @log_calls
     @requires_login
     def user_add_contact(self, contact_email):
         pass
 
+    @log_calls
     @requires_login
     def user_remove_contact(self, contact_id):
         pass
