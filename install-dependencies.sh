@@ -1,3 +1,4 @@
-dependencies="nose"
+dependencies=""
+dev_dependencies="nose"
 
-pip install $dependencies
+pip install "$dependencies $dev_dependencies"
