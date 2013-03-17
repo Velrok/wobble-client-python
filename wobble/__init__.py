@@ -47,10 +47,10 @@ class WobbleService(object):
         return self
 
     def __exit__(self, exception=None, error=None, traceback=None):
+        self.user_signout()
         if exception:
             raise exception, error, traceback
 
-        self.user_signout()
         return self
 
     @log_calls
