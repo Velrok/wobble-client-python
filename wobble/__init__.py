@@ -56,13 +56,9 @@ class WobbleService(object):
         return self
 
     @log_calls
-    def connect(self, user_name_or_api_key, user_password=None):
-        if user_password is None:
-            # only one parameter so its the api key
-            self.api_key = user_name_or_api_key
-        else:
-            # we have user name and password
-            self.api_key = self.user_login(user_name_or_api_key, user_password)
+    def connect(self, user_name, user_password):
+        self.api_key = self.user_login(user_name, user_password)
+        return self
 
     def is_loged_in(self):
         return self.api_key is not None
@@ -174,12 +170,14 @@ class WobbleService(object):
 
     @log_calls
     def user_login(self, email, password):
-        pass
+        result = self.wobble_server.user_login(email=email.lower(),
+                                               password=password)
+        return result['apikey']
 
     @requires_login
     @log_calls
     def user_signout(self):
-        pass
+        return self.wobble_server.user_signout(apikey=self.api_key)
 
     @requires_login
     @log_calls
