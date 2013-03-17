@@ -91,7 +91,9 @@ class WobbleService(object):
     @log_calls
     def topic_get_details(self, topic_id):
         # params => id
-        pass
+        result = self.wobble_server.topic_get_details(id=topic_id,
+                                                      apikey=self.api_key)
+        return result
 
     @requires_login
     @log_calls
