@@ -35,7 +35,7 @@ class WobbleService(object):
         return log_calls_decorator
 
     def __init__(self, api_endpoint='http://wobble.moinz.de/api/endpoint.php',
-                       json_rpc_server_class=jsonrpclib.Server):
+                 json_rpc_server_class=jsonrpclib.Server):
         super(WobbleService, self).__init__()
         self.wobble_server = json_rpc_server_class(api_endpoint)
         self.api_endpoint = api_endpoint
@@ -72,7 +72,7 @@ class WobbleService(object):
     @requires_login
     @log_calls
     def topics_list(self, archived=False):
-        pass
+        return self.wobble_server.topics_list(archived=archived, apikey=self.api_key)
 
     @requires_login
     @log_calls
@@ -106,8 +106,7 @@ class WobbleService(object):
     @requires_login
     @log_calls
     def topic_set_archived(self, topic_id, archived):
-        # archived => Boolean(0,1)
-        pass
+        return self.wobble_server.topic_set_archived(archived=archived, apikey=self.api_key, topic_id=topic_id)
 
     @requires_login
     @log_calls
