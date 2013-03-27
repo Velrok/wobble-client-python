@@ -108,6 +108,10 @@ class WobbleService(object):
     def topic_set_archived(self, topic_id, archived):
         return self.wobble_server.topic_set_archived(archived=archived, apikey=self.api_key, topic_id=topic_id)
 
+    def archive_topic(self, topic_id):
+        """Shorthand for topic_set_archived(archived=1)."""
+        return self.topic_set_archived(topic_id, 1)
+
     @requires_login
     @log_calls
     def topic_remove_message(self, topic_id, post_id):
